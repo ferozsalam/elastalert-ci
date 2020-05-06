@@ -9,7 +9,7 @@ To test:
 4. Run `docker-compose build`
 5. Run `docker-compose up`
 
-A successful run will output something like:
+A successful run will eventually output something like:
 
 ```
 elastalert-unit_1  | elastalert_status - {'rule_name': 'Test Rule', 'endtime': datetime.datetime(2020, 4, 15, 14, 8, 45, 881000, tzinfo=tzlocal()), 'starttime': datetime.datetime(2020, 4, 15, 14, 8, 44, 881000, tzinfo=tzlocal()), 'matches': 1, 'hits': 0, '@timestamp': datetime.datetime(2020, 5, 6, 18, 59, 17, 812561, tzinfo=tzutc()), 'time_taken': 0.018953800201416016}
