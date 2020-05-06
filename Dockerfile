@@ -5,6 +5,10 @@ LABEL maintainer="Feroz Salam (feroz@argh.in)"
 
 RUN pip install elastalert
 
+# Required CircleCI dependencies
+RUN apt update && \
+    apt install -y git ssh tar gzip ca-certificates
+
 # Need to do this because of https://github.com/Yelp/elastalert/issues/2781
 RUN sed -i 's/string.letters/string.ascii_letters/g' /usr/local/lib/python3.6/site-packages/elastalert/test_rule.py
 
