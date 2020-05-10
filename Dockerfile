@@ -18,6 +18,7 @@ RUN tar -C /usr/local/bin -xvzf dockerize-linux-amd64-v0.6.1.tar.gz
 WORKDIR /data
 
 COPY elastalert-unit.py /data
+COPY config.yaml /data
 
 CMD ["dockerize", "-wait", "http://elasticsearch:9200/_cluster/health", "-timeout", "120s", \
             "python", "elastalert-unit.py", "--data", "/data/data.json", "--rule", "rule.yaml"]
