@@ -29,4 +29,4 @@ rule_yaml['index'] = 'test'
 with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
     yaml.dump(rule_yaml, rewritten_rule_file)
 
-subprocess.run(["elastalert-test-rule", "--config", "/data/config.yaml", "rule_rewritten.yaml"])
+subprocess.run(["elastalert-test-rule", "rule_rewritten.yaml"])
