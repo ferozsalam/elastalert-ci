@@ -13,7 +13,7 @@ parser.add_argument('--rule', type=str, help='File that contains rule to run')
 args = parser.parse_args()
 
 # Build request to upload test data to ES
-upload_url = "http://elasticsearch:9200/test/_bulk?pretty&refresh"
+upload_url = "http://localhost:9200/test/_bulk?pretty&refresh"
 headers = {'Content-Type': 'application/json'}
 data = open(args.data, 'rb').read()
 
