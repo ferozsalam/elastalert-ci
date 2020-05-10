@@ -17,6 +17,5 @@ RUN tar -C /usr/local/bin -xvzf dockerize-linux-amd64-v0.6.1.tar.gz
 
 WORKDIR /data
 
-CMD ["dockerize", "-wait", "http://elasticsearch:9200", "-timeout", "120s", \
-            "elastalert-test-rule", "--data" , "data.json", \ 
-            "--config", "config.yaml", "rule.yaml"]
+CMD ["dockerize", "-wait", "http://elasticsearch:9200/_cluster/health", "-timeout", "120s", \
+            "python", "elastalert-unit.py", "--data", "/data/data.json", "--rule", "rule.yaml"]
