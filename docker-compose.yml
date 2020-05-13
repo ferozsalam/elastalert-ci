@@ -6,6 +6,8 @@ services:
     - ./:/data
     depends_on:
     - "elasticsearch"
+    environment:
+    - "ES_HOST=elasticsearch"
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     ports:

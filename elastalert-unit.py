@@ -1,6 +1,7 @@
 #!/bin/python
 
 import argparse
+import os
 import requests
 import subprocess
 import time
@@ -13,7 +14,11 @@ parser.add_argument('--rule', type=str, help='File that contains rule to run')
 args = parser.parse_args()
 
 # Build request to upload test data to ES
-upload_url = "http://localhost:9200/test/_bulk?pretty&refresh"
+if "ES_HOST" in os.environ:
+    upload_url = "http://"+ os.environ["ES_HOST"] + ":9200/test/_bulk?pretty&refresh"
+else:
+    upload_url = "http://localhost:9200/test/_bulk?pretty&refresh"
+
 headers = {'Content-Type': 'application/json'}
 data = open(args.data, 'rb').read()
 
