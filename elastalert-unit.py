@@ -35,4 +35,4 @@ with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
     yaml.dump(rule_yaml, rewritten_rule_file)
 
 subprocess.run(["elastalert-test-rule", "--formatted-output", "--config", "/data/config.yaml", 
-                    "rule_rewritten.yaml"])
+                    "rule_rewritten.yaml"], check=True)
