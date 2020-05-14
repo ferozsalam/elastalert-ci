@@ -1,6 +1,7 @@
 #!/bin/python
 
 import argparse
+import json
 import os
 import requests
 import subprocess
@@ -36,3 +37,11 @@ with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
 
 subprocess.run(["elastalert-test-rule", "--formatted-output", "--config", "/data/config.yaml", 
                     "rule_rewritten.yaml"], check=True)
+
+with open('output.json', 'r') as output_json:
+    output = json.load(output_json)
+
+if output["writeback"]["elastalert_status"]["matches"] > 0:
+    exit(0)
+else:
+    exit(1)
