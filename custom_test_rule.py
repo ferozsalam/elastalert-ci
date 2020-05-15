@@ -440,10 +440,6 @@ class MockElastAlerter(object):
         if not args.schema_only and not args.count:
             self.run_elastalert(rule_yaml, conf, args)
 
-        if args.formatted_output:
-            with open('output.json', 'w') as output_file:
-                output_file.write(json.dumps(self.formatted_output))
-
 
 def main():
     test_instance = MockElastAlerter()
