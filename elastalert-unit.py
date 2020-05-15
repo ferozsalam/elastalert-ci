@@ -35,8 +35,13 @@ rule_yaml['index'] = 'test'
 with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
     yaml.dump(rule_yaml, rewritten_rule_file)
 
-subprocess.run(["elastalert-test-rule", "--formatted-output", "--config", "/data/config.yaml", 
-                    "rule_rewritten.yaml"], check=True)
+subprocess.run(["elastalert-test-rule",
+                "--formatted-output",
+                "--config", "/data/config.yaml",
+                "--start", rule_yaml['ci_start_time'],
+                "--end", rule_yaml['ci_end_time'],
+                "rule_rewritten.yaml"
+                ], check=True)
 
 with open('output.json', 'r') as output_json:
     output = json.load(output_json)
