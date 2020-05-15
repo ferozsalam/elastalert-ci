@@ -3,6 +3,7 @@
 import argparse
 import json
 import os
+import re
 import requests
 import subprocess
 import time
@@ -35,18 +36,23 @@ rule_yaml['index'] = 'test'
 with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
     yaml.dump(rule_yaml, rewritten_rule_file)
 
-subprocess.run(["elastalert-test-rule",
-                "--formatted-output",
-                "--config", "/data/config.yaml",
-                "--start", rule_yaml['ci_start_time'],
-                "--end", rule_yaml['ci_end_time'],
-                "rule_rewritten.yaml"
-                ], check=True)
+elastalert_run = subprocess.run(["elastalert-test-rule",
+                                  "--formatted-output",
+                                  "--config", "/data/config.yaml",
+                                  "--start", rule_yaml['ci_start_time'],
+                                  "--end", rule_yaml['ci_end_time'],
+                                  "rule_rewritten.yaml"], 
+                                  capture_output=True,
+                                  text=True,
+                                  check=True)
+
+print(elastalert_run.stderr)
+alert_fired = re.search(":Alert for", elastalert_run.stderr)
 
 with open('output.json', 'r') as output_json:
     output = json.load(output_json)
 
-if output["writeback"]["elastalert_status"]["matches"] > 0:
+if (output["writeback"]["elastalert_status"]["matches"] > 0 and alert_fired):
     exit(0)
 else:
     exit(1)
