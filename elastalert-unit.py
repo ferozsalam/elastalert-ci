@@ -15,26 +15,27 @@ parser.add_argument('--rule', type=str, help='File that contains rule to run')
 
 args = parser.parse_args()
 
+# Load rule to test against, change the index to our test index
+with open(args.rule) as rule_file:
+    rule_yaml = yaml.load(rule_file)
+rule_yaml['index'] = 'test'
+with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
+    yaml.dump(rule_yaml, rewritten_rule_file)
+
+with open(args.data) as data_files:
+    data_files_yaml = yaml.load(data_files)
+
+data = open(data_files_yaml[rule_yaml['ci_data']]["file"], 'rb').read()
+headers = {'Content-Type': 'application/json'}
+
 # Build request to upload test data to ES
 if "ES_HOST" in os.environ:
     upload_url = "http://"+ os.environ["ES_HOST"] + ":9200/test/_bulk?pretty&refresh"
 else:
     upload_url = "http://localhost:9200/test/_bulk?pretty&refresh"
 
-headers = {'Content-Type': 'application/json'}
-data = open(args.data, 'rb').read()
-
 # Upload data to ES
 res = requests.post(upload_url, headers=headers, data=data)
-
-# Load rule to test against, change the index to our test index
-with open(args.rule) as rule_file:
-    rule_yaml = yaml.load(rule_file)
-
-rule_yaml['index'] = 'test'
-
-with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
-    yaml.dump(rule_yaml, rewritten_rule_file)
 
 elastalert_run = subprocess.run(["elastalert-test-rule",
                                   "--formatted-output",
