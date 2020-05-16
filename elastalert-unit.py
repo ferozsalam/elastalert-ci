@@ -13,6 +13,9 @@ parser.add_argument('--rules', nargs='+', type=str, help='File that contains rul
 
 args = parser.parse_args()
 
+passed_rules = []
+failed_rules = []
+
 for rule_filename in args.rules:
     # Load rule to test against, change the index to our test index
     with open(rule_filename) as rule_file:
@@ -67,6 +70,12 @@ for rule_filename in args.rules:
     delete_res = requests.delete(delete_url)
 
     if (output["writeback"]["elastalert_status"]["matches"] > 0 and alert_fired):
-        exit(0)
+        passed_rules.append(rule["name"])
     else:
-        exit(1)
+        failed_rules.append(rule["name"])
+
+if len(failed_rules):
+    print("Failed rules: " + str(failed_rules))
+    exit(1)
+else:
+    exit(0)
