@@ -1,6 +1,6 @@
 version: '2.0'
 services:
-  elastalert-unit:
+  elastalert-ci:
     build: .
     volumes:
     - ./:/data

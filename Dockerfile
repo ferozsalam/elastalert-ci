@@ -1,6 +1,6 @@
 FROM python:3.8-buster
 
-LABEL description="Elastalert unit testing module"
+LABEL description="Elastalert CI testing module"
 LABEL maintainer="Feroz Salam (feroz@argh.in)"
 
 RUN pip install elastalert
@@ -16,8 +16,8 @@ RUN tar -C /usr/local/bin -xvzf dockerize-linux-amd64-v0.6.1.tar.gz
 
 WORKDIR /data
 
-COPY elastalert-unit.py /data
+COPY elastalert-ci.py /data
 COPY config.yaml /data
 
 CMD ["dockerize", "-wait", "http://elasticsearch:9200/_cluster/health", "-timeout", "120s", \
-            "python", "elastalert-unit.py", "--data", "data-files.yaml", "--rules", "rule.yaml"]
+            "python", "elastalert-ci.py", "--data", "data-files.yaml", "--rules", "rule.yaml"]
