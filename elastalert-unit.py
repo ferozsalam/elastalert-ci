@@ -19,14 +19,15 @@ args = parser.parse_args()
 with open(args.rule) as rule_file:
     rule = yaml.load(rule_file)
 
-if (not rule['ci_data_source']):
+try:
+    data_source = rule["ci_data_source"]
+except:
+    print "No data source defined for file, skipping"
     exit(0)
 
 rule['index'] = 'test'
 with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
     yaml.dump(rule, rewritten_rule_file)
-
-data_source = rule["ci_data_source"]
 
 with open(args.data) as data_config_file:
     data_config = yaml.load(data_config_file)
