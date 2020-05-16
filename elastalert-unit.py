@@ -26,7 +26,7 @@ for rule_filename in args.rules:
         data_source = rule["ci_data_source"]
     except:
         print("No data source defined for file, skipping")
-        skipped_rules.append(rule["name"])
+        skipped_rules.append(rule)
         continue
 
     rule['index'] = 'test'
