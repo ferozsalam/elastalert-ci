@@ -20,12 +20,12 @@ container, uploads provided test data to the Elasticsearch container, and then
 runs `elastalert-test-rule` against all the rules that are provided to it.
 The results of `elastalert-test-rule` are passed to a wrapper script that
 collects the results of all rules that have run, returning a 0 exit code if all
-alerts have fired and a 1 exit code if any rules have failed to load or haven't
-fired.
+alerts have fired and a 1 exit code if any rules haven't fired.
 
 Key features:
 
 - Works against all types of Elastalert rules, applying filters
+  (unlike `elastalert-test-rule` when run with the `--data` flag)
 - Designed to work recursively against all Elastalert rules in a folder
 - Designed to work using CircleCI's parallelism features
 - Can ignore rules that don't have data to test against
