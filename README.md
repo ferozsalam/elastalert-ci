@@ -20,7 +20,8 @@ container, uploads provided test data to the Elasticsearch container, and then
 runs `elastalert-test-rule` against all the rules that are provided to it.
 The results of `elastalert-test-rule` are passed to a wrapper script that
 collects the results of all rules that have run, returning a 0 exit code if all
-rules have passed and a 1 exit code if any rules have failed.
+alerts have fired and a 1 exit code if any rules have failed to load or haven't
+fired.
 
 Key features:
 
