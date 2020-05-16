@@ -15,6 +15,7 @@ args = parser.parse_args()
 
 passed_rules = []
 failed_rules = []
+skipped_rules = []
 
 for rule_filename in args.rules:
     # Load rule to test against, change the index to our test index
@@ -25,7 +26,8 @@ for rule_filename in args.rules:
         data_source = rule["ci_data_source"]
     except:
         print("No data source defined for file, skipping")
-        exit(0)
+        skipped_rules.append(rule["name"])
+        continue
 
     rule['index'] = 'test'
     with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
