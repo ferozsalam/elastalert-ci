@@ -52,6 +52,7 @@ elastalert_run = subprocess.run(["elastalert-test-rule",
 alert_fired = re.search(":Alert for", elastalert_run.stderr)
 
 filtered_stdout = elastalert_run.stdout.replace("Didn't get any results.\n1 rules loaded\n", "")
+print(filtered_stdout)
 output = json.loads(filtered_stdout)
 
 if (output["writeback"]["elastalert_status"]["matches"] > 0 and alert_fired):
