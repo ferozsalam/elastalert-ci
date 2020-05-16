@@ -1,4 +1,4 @@
 accounts:
-  file: "data.json"
+  filename: "data.json"
   start_time: "2020-05-13T10:08:44"
   end_time: "2020-05-13T15:08:44"
