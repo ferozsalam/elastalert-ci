@@ -22,7 +22,7 @@ with open(args.rule) as rule_file:
 try:
     data_source = rule["ci_data_source"]
 except:
-    print "No data source defined for file, skipping"
+    print("No data source defined for file, skipping")
     exit(0)
 
 rule['index'] = 'test'
