@@ -83,7 +83,7 @@ elastalert-ci_1  |
 elastalertci_elastalert-ci_1 exited with code 0
 ```
 
-Edit your `rule.yaml`, `data-files.yaml, and `data.json` as required to test
+Edit your `rule.yaml`, `data-files.yaml`, and `data.json` as required to test
 various different rule and data structures.
 
 [1]: https://github.com/ferozsalam/elastalert-dummy-rules/blob/master/.circleci/config.yml
