@@ -18,6 +18,10 @@ args = parser.parse_args()
 # Load rule to test against, change the index to our test index
 with open(args.rule) as rule_file:
     rule = yaml.load(rule_file)
+
+if (not rule['ci_data_source']):
+    exit(0)
+
 rule['index'] = 'test'
 with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
     yaml.dump(rule, rewritten_rule_file)
