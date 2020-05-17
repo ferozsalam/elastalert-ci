@@ -15,6 +15,8 @@ use to test your Elastalert rules.
 [elastalert-dummy-rules](https://github.com/ferozsalam/elastalert-dummy-rules)
 provides an example of how you could use this image within a CircleCI pipeline.
 
+![](https://padlock.argh.in/images/circleci.png)
+
 The CI configuration spins up an Elasticsearch container and an Elastalert 
 container, uploads provided test data to the Elasticsearch container, and then
 runs `elastalert-test-rule` against all the rules that are provided to it.
