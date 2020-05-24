@@ -7,8 +7,13 @@ import subprocess
 import time
 import yaml
 
+# Rewrite elements of a given rule to fit into the testing framework
 def rewrite_rule(rule):
+    # Use a single test index for all the data at the moment
     rule['index'] = 'test'
+
+    # The Docker ES instance we spin up doesn't have SSL enabled, but all networking
+    # is local, so this is not a security concern
     if 'use_ssl' in rule:
         rule['use_ssl'] = False
 
