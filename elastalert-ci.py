@@ -40,7 +40,7 @@ else:
 for rule_filename in args.rules:
     # Load rule to test against
     with open(rule_filename) as rule_file:
-        rule = yaml.load(rule_file)
+        rule = yaml.safe_load(rule_file)
 
     rewrite_rule(rule)
 
@@ -52,7 +52,7 @@ for rule_filename in args.rules:
         continue
 
     with open(args.data) as data_config_file:
-        data_config = yaml.load(data_config_file)
+        data_config = yaml.safe_load(data_config_file)
 
     data = open(data_config[data_source]["filename"], 'rb').read()
     headers = {'Content-Type': 'application/json'}
@@ -74,7 +74,6 @@ for rule_filename in args.rules:
     alert_fired = re.search(":Alert for", elastalert_run.stderr)
 
     filtered_stdout = elastalert_run.stdout.replace("Didn't get any results.\n1 rules loaded\n", "")
-    print(filtered_stdout)
     output = json.loads(filtered_stdout)
 
     # Clear the ES index
