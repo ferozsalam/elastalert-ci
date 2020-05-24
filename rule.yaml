@@ -2,6 +2,7 @@ name: "Dummy rule"
 description: "Dummy rule to illustrate CI for Elastalert"
 
 index: bank
+use_ssl: True
 type: any 
 filter:
   - query_string:

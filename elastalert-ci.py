@@ -7,6 +7,14 @@ import subprocess
 import time
 import yaml
 
+def rewrite_rule(rule):
+    rule['index'] = 'test'
+    if 'use_ssl' in rule:
+        rule['use_ssl'] = False
+
+    with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
+        yaml.dump(rule, rewritten_rule_file)
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--data', type=str, help='File that contains data to match against')
 parser.add_argument('--rules', nargs='+', type=str, help='File that contains rule to run')
@@ -29,16 +37,14 @@ for rule_filename in args.rules:
     with open(rule_filename) as rule_file:
         rule = yaml.load(rule_file)
 
+    rewrite_rule(rule)
+
     try:
         data_source = rule["ci_data_source"]
     except:
-        print("No data source defined for file, skipping")
+        print("No CI definition for file, skipping")
         skipped_rules.append(rule)
         continue
-
-    rule['index'] = 'test'
-    with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
-        yaml.dump(rule, rewritten_rule_file)
 
     with open(args.data) as data_config_file:
         data_config = yaml.load(data_config_file)
