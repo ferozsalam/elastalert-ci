@@ -69,7 +69,7 @@ Finally, define your CircleCI configuration. Something like what has been define
 
 ## How do I test this image locally?
 
-`docker-compose` funcionality has been provided for illustrative purposes.
+`docker-compose` functionality has been provided for illustrative purposes.
 
 To test:
 
