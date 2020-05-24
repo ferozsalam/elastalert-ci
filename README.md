@@ -75,15 +75,16 @@ To test:
 
 1. Clone this repo
 2. Run `docker-compose build`
-3. Run `docker-compose up`
+3. Run `docker-compose up --abort-on-container-exit`
 
 A successful run will eventually output something like:
 
 ```
-elastalert-ci_1  | elastalert_status - {'rule_name': 'Dummy rule', 'endtime': datetime.datetime(2020, 5, 10, 16, 24, 40, 925124, tzinfo=tzutc()), 'starttime': datetime.datetime(2020, 5, 9, 16, 24, 40, 925124, tzinfo=tzutc()), 'matches': 1, 'hits': 1, '@timestamp': datetime.datetime(2020, 5, 10, 16, 24, 42, 221058, tzinfo=tzutc()), 'time_taken': 1.0156700611114502}
-elastalert-ci_1  |
 elastalertci_elastalert-ci_1 exited with code 0
 ```
+
+A zero exit code means that your rule matched the provided data; a non-zero exit
+code means that the rule either didn't match or something else went wrong.
 
 Edit your `rule.yaml`, `data-files.yaml`, and `data.json` as required to test
 various different rule and data structures.
