@@ -35,10 +35,12 @@ def load_es_data(data):
     upload_url = get_es_base_url() + "_bulk?pretty&refresh"
 
     res = requests.post(upload_url, headers=headers, data=data)
+    res.raise_for_status()
 
 def clear_test_index():
-    delete_url = get_es_base_url() + "test/"
+    delete_url = get_es_base_url()
     delete_res = requests.delete(delete_url)
+    delete_res.raise_for_status()
 
 def rule_matched(raw_elastalert_output):
     filtered_stdout = raw_elastalert_output.replace("Didn't get any results.\n1 rules loaded\n", "")
@@ -56,7 +58,11 @@ def check_rule(rule, data_config):
     rewrite_rule(rule)
 
     data = open(data_config[data_source]["filename"], 'rb').read()
-    load_es_data(data)
+    try:
+        load_es_data(data)
+    except requests.exceptions.HTTPError:
+        print("Failed to load data into Elasticsearch, exiting")
+        exit(1)
 
     elastalert_run = subprocess.run(["elastalert-test-rule",
                                       "--formatted-output",
@@ -67,6 +73,8 @@ def check_rule(rule, data_config):
                                       capture_output=True,
                                       text=True,
                                       check=True)
+
+    clear_test_index()
 
     alert_fired = re.search(":Alert for", elastalert_run.stderr)
     if (alert_fired and rule_matched(elastalert_run.stdout)):
@@ -100,8 +108,6 @@ def main():
         except:
             print("Rule checking failed, skipping file")
             continue
-
-        clear_test_index()
 
     if len(failed_rules):
         print("Failed rules: " + str(failed_rules))
