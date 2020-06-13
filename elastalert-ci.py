@@ -50,8 +50,8 @@ def check_rule(rule, data_config):
     try:
         data_source = rule["ci_data_source"]
     except:
-        print("No CI definition for rule, skipping")
-        return True
+        print("No CI definition for rule")
+        raise
 
     rewrite_rule(rule)
 
@@ -91,11 +91,15 @@ def main():
         # Load rule to test against
         with open(rule_filename) as rule_file:
             rule = yaml.safe_load(rule_file)
-
-        if (check_rule(rule, data_config)):
-            passed_rules.append(rule["name"])
-        else:
-            failed_rules.append(rule["name"])
+        
+        try:
+            if (check_rule(rule, data_config)):
+                passed_rules.append(rule["name"])
+            else:
+                failed_rules.append(rule["name"])
+        except:
+            print("Rule checking failed, skipping file")
+            continue
 
         clear_test_index()
 
