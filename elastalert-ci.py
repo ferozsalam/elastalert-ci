@@ -74,7 +74,11 @@ def check_rule(rule, data_config):
                                       text=True,
                                       check=True)
 
-    clear_test_index()
+    try:
+        clear_test_index()
+    except requests.exceptions.HTTPError:
+        print("Failed to remove data from Elasticsearch, exiting")
+        exit(1)
 
     alert_fired = re.search(":Alert for", elastalert_run.stderr)
     if (alert_fired and rule_matched(elastalert_run.stdout)):
