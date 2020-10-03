@@ -8,7 +8,7 @@ import time
 import yaml
 
 # Rewrite elements of a given rule to fit into the testing framework
-def rewrite_rule(rule):
+def rewrite_rule(rule, data_config):
     # Use a single test index for all the data at the moment
     rule['index'] = 'test'
 
@@ -16,6 +16,10 @@ def rewrite_rule(rule):
     # is local, so this is not a security concern
     if 'use_ssl' in rule:
         rule['use_ssl'] = False
+
+    # Use a custom timestamp field if one is specified in the data source
+    if 'timestamp_field' in data_config:
+        rule['timestamp_field'] = data_config['timestamp_field']
 
     with open('rule_rewritten.yaml', 'w') as rewritten_rule_file:
         yaml.dump(rule, rewritten_rule_file)
@@ -49,19 +53,21 @@ def rule_matched(raw_elastalert_output):
     return output["writeback"]["elastalert_status"]["matches"] > 0
 
 def check_rule(rule, data_config):
+    print(f'Testing {rule["name"]}')
     try:
         data_source = rule["ci_data_source"]
     except:
         print("No CI definition for rule")
         raise
 
-    rewrite_rule(rule)
+    rewrite_rule(rule, data_config[data_source])
 
-    data = open(data_config[data_source]["filename"], 'rb').read()
+    filename = data_config[data_source]["filename"]
+    data = open(filename, 'rb').read()
     try:
         load_es_data(data)
-    except requests.exceptions.HTTPError:
-        print("Failed to load data into Elasticsearch, exiting")
+    except requests.exceptions.HTTPError as e:
+        print(f"Failed to load data from {filename} into Elasticsearch, exiting")
         exit(1)
 
     elastalert_run = subprocess.run(["elastalert-test-rule",
