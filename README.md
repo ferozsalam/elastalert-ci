@@ -2,7 +2,7 @@
 
 Parallelisable continuous integration for Elastalert rules using CircleCI.
 
-**2020-05-16**: This is an early version of a side-project. It might change rapidly,
+**Note**: This is an early version of a side-project. It might change rapidly,
 or might not be updated at all; use it with this in mind. I would not recommend
 using this image to anyone who is not already somewhat familiar with Elasticsearch,
 Elastalert, and Docker.
