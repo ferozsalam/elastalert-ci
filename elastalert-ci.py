@@ -117,7 +117,7 @@ def main():
             else:
                 failed_rules.append(rule["name"])
         except Exception:
-            print(f"Checking rule {rule['name']} failed, skipping file")
+            print(f"YAML file failed rule checks, skipping")
             continue
 
     if len(failed_rules):
