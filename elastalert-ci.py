@@ -53,7 +53,7 @@ def rule_matched(raw_elastalert_output):
     return output["writeback"]["elastalert_status"]["matches"] > 0
 
 def check_rule(rule, data_config):
-    print(f'Testing {rule["name"]}')
+    print(f'Testing {rule.get("name", "[rule name not found]")}')
     try:
         data_source = rule["ci_data_source"]
     except:
