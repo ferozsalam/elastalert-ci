@@ -1,0 +1,15 @@
+name: "Catch Firefox users"
+description: "Alert whenever we see a Firefox user in the logs"
+
+index: kibana_sample_data_logs`
+use_ssl: True
+type: any 
+filter:
+  - query_string:
+      query: "*Firefox*"
+
+alert_text: "test alert"
+alert:
+  - "debug"
+
+ci_data_source: "weblogs"

@@ -62,7 +62,7 @@ def check_rule(rule, data_config):
 
     rewrite_rule(rule, data_config[data_source])
 
-    filename = data_config[data_source]["filename"]
+    filename = data_config['directory'] + '/' + data_config[data_source]["filename"]
     data = open(filename, 'rb').read()
     try:
         load_es_data(data)
@@ -101,6 +101,7 @@ def main():
 
     with open(args.data) as data_config_file:
         data_config = yaml.safe_load(data_config_file)
+    data_config['directory'] =  os.path.dirname(args.data)
 
     passed_rules = []
     failed_rules = []
@@ -115,8 +116,8 @@ def main():
                 passed_rules.append(rule["name"])
             else:
                 failed_rules.append(rule["name"])
-        except:
-            print("Rule checking failed, skipping file")
+        except Exception:
+            print(f"Checking rule {rule['name']} failed, skipping file")
             continue
 
     if len(failed_rules):
