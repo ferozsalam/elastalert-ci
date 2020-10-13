@@ -11,5 +11,3 @@ filter:
 alert_text: "test alert"
 alert:
   - "debug"
-
-ci_data_source: "weblogs"
