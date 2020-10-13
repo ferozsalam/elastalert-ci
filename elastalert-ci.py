@@ -120,6 +120,10 @@ def main():
             print(f"YAML file failed rule checks, skipping")
             continue
 
+    # Clean up
+    if os.path.exists("rule_rewritten.yaml"):
+        os.remove("rule_rewritten.yaml")
+
     if len(failed_rules):
         print("Failed rules: " + str(failed_rules))
         exit(1)
