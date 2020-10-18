@@ -49,7 +49,20 @@ def load_es_data(data):
     upload_url = get_es_base_url() + "_bulk?pretty&refresh"
     skip_ssl_verify = "SKIP_SSL_VERIFY" in os.environ
 
-    res = requests.post(upload_url, headers=headers, data=data, verify=(not skip_ssl_verify))
+    if os.environ.get('ES_USERNAME'):
+        res = requests.post(
+                            upload_url,
+                            headers=headers,
+                            data=data,
+                            verify=(not skip_ssl_verify),
+                            auth=(
+                                  os.environ.get('ES_USERNAME'),
+                                  os.environ.get('ES_PASSWORD')
+                                 )
+                            )
+    else:
+        res = requests.post(upload_url, headers=headers, data=data, verify=(not skip_ssl_verify), auth=False)
+
     res.raise_for_status()
 
 def clear_test_index():
