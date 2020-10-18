@@ -121,8 +121,9 @@ def main():
                 passed_rules.append(rule["name"])
             else:
                 failed_rules.append(rule["name"])
-        except:
+        except Exception as e:
             print(f"YAML file failed rule checks, skipping")
+            print(f"Detailed error:\n{e}")
             continue
 
     # Clean up
