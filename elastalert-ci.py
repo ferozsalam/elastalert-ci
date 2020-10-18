@@ -12,8 +12,6 @@ def rewrite_rule(rule, data_config):
     # Use a single test index for all the data at the moment
     rule['index'] = 'test'
 
-    # The Docker ES instance we spin up doesn't have SSL enabled, but all networking
-    # is local, so this is not a security concern
     if ('ES_SCHEME' not in os.environ):
         scheme = 'http'
     else:
