@@ -14,7 +14,7 @@ def rewrite_rule(rule, data_config):
 
     # The Docker ES instance we spin up doesn't have SSL enabled, but all networking
     # is local, so this is not a security concern
-    if 'use_ssl' in rule:
+    if ('use_ssl' in rule) and (os.environ.get('ES_SCHEME') == 'http') :
         rule['use_ssl'] = False
 
     # Use a custom timestamp field if one is specified in the data source
@@ -27,10 +27,15 @@ def rewrite_rule(rule, data_config):
 # docker-compose sets the hostname to be the service name, while CircleCI
 # uses localhost for everything, so set the Elasticsearch hostname accordingly
 def get_es_base_url():
+
+    scheme = 'http'
+    if os.environ.get('ES_SCHEME'):
+        scheme = os.environ.get('ES_SCHEME')
+
     if "ES_HOST" in os.environ:
-        es_base_url = "http://"+ os.environ["ES_HOST"] + ":9200/test/"
+        es_base_url = f"{scheme}://{os.environ['ES_HOST']}:9200/test/"
     else:
-        es_base_url = "http://localhost:9200/test/"
+        es_base_url = f"{scheme}://localhost:9200/test/"
 
     return es_base_url
 
