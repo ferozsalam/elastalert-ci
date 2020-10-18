@@ -14,8 +14,15 @@ def rewrite_rule(rule, data_config):
 
     # The Docker ES instance we spin up doesn't have SSL enabled, but all networking
     # is local, so this is not a security concern
-    if ('use_ssl' in rule) and (os.environ.get('ES_SCHEME') == 'http') :
+    if ('ES_SCHEME' not in os.environ):
+        scheme = 'http'
+    else:
+        scheme = os.environ.get('ES_SCHEME')
+
+    if ('use_ssl' in rule) and (scheme == 'http'):
         rule['use_ssl'] = False
+
+    rule['verify_certs'] = 'SKIP_SSL_VERIFY' in os.environ
 
     # Use a custom timestamp field if one is specified in the data source
     if 'timestamp_field' in data_config:
@@ -42,8 +49,9 @@ def get_es_base_url():
 def load_es_data(data):
     headers = {'Content-Type': 'application/json'}
     upload_url = get_es_base_url() + "_bulk?pretty&refresh"
+    skip_ssl_verify = "SKIP_SSL_VERIFY" in os.environ
 
-    res = requests.post(upload_url, headers=headers, data=data)
+    res = requests.post(upload_url, headers=headers, data=data, verify=(not skip_ssl_verify))
     res.raise_for_status()
 
 def clear_test_index():
