@@ -1,4 +1,5 @@
 import argparse
+import glob
 import json
 import os
 import re
@@ -123,16 +124,19 @@ def check_rule(rule, data_config, data_directory):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=str, help='File that contains data to match against')
-    parser.add_argument('--rules', nargs='+', type=str, help='File that contains rule to run')
+    parser.add_argument('--rules_directory', type=str, help='Directory containing rules to run')
 
     args = parser.parse_args()
 
     with open(args.data) as data_config_file:
         data_config = yaml.safe_load(data_config_file)
 
+    rules = glob.glob(f"{args.rules_directory}/*.yaml")
+
     passed_rules = []
     failed_rules = []
-    for rule_filename in args.rules:
+
+    for rule_filename in rules:
         # Load rule to test against
         with open(rule_filename) as rule_file:
             rule = yaml.safe_load(rule_file)
@@ -143,7 +147,7 @@ def main():
             else:
                 failed_rules.append(rule["name"])
         except Exception as e:
-            print(f"YAML file failed rule checks, skipping")
+            print(f"YAML file raised an exception, skipping")
             print(f"Detailed error:\n{e}")
             continue
 
