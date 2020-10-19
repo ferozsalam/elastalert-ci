@@ -66,8 +66,10 @@ def load_es_data(data):
     res.raise_for_status()
 
 def clear_test_index():
+    skip_ssl_verify = "SKIP_SSL_VERIFY" in os.environ
+
     delete_url = get_es_base_url()
-    delete_res = requests.delete(delete_url)
+    delete_res = requests.delete(delete_url, verify=(not skip_ssl_verify))
     delete_res.raise_for_status()
 
 def rule_matched(raw_elastalert_output):
