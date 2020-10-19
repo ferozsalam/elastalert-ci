@@ -20,7 +20,7 @@ def rewrite_rule(rule, data_config):
     if ('use_ssl' in rule) and (scheme == 'http'):
         rule['use_ssl'] = False
 
-    rule['verify_certs'] = 'SKIP_SSL_VERIFY' in os.environ
+    rule['verify_certs'] = not ('SKIP_SSL_VERIFY' in os.environ)
 
     # Use a custom timestamp field if one is specified in the data source
     if 'timestamp_field' in data_config:
