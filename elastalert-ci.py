@@ -111,8 +111,9 @@ def check_rule(rule, data_config, data_directory):
 
         try:
             clear_test_index()
-        except requests.exceptions.HTTPError:
+        except requests.exceptions.HTTPError as e:
             print("Failed to remove data from Elasticsearch, exiting")
+            print(e)
             exit(1)
 
         alert_fired = re.search(":Alert for", elastalert_run.stderr)
