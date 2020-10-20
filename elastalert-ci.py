@@ -70,7 +70,18 @@ def clear_test_index():
     skip_ssl_verify = "SKIP_SSL_VERIFY" in os.environ
 
     delete_url = get_es_base_url()
-    delete_res = requests.delete(delete_url, verify=(not skip_ssl_verify))
+
+    if os.environ.get('ES_USERNAME'):
+        delete_res = requests.delete(delete_url,
+                                     verify=(not skip_ssl_verify),
+                                     auth=(
+                                        os.environ.get('ES_USERNAME'),
+                                        os.environ.get('ES_PASSWORD')
+                                     )
+                                    )
+    else:
+        delete_res = requests.delete(delete_url, verify=(not skip_ssl_verify))
+
     delete_res.raise_for_status()
 
 def rule_matched(raw_elastalert_output):
@@ -145,6 +156,7 @@ def main():
         try:
             if (check_rule(rule, data_config, os.path.dirname(args.data))):
                 passed_rules.append(rule["name"])
+                print(f"Rule {rule['name']} passed!")
             else:
                 failed_rules.append(rule["name"])
         except Exception as e:
