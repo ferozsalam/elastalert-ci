@@ -18,6 +18,8 @@ def rewrite_rule(rule, data_config):
     else:
         scheme = os.environ.get('ES_SCHEME')
 
+    rule.pop('aggregation', None)
+
     if ('use_ssl' in rule) and (scheme == 'http'):
         rule['use_ssl'] = False
 
