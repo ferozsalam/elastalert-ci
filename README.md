@@ -21,7 +21,7 @@ provides an example of how you could use this image within a CircleCI pipeline.
 
 ![](https://padlock.argh.in/images/circleci.png)
 
-Both the Docker Compose and CircleCI configuratiosn spin up an Elasticsearch
+Both the Docker Compose and CircleCI configurations spin up an Elasticsearch
 container and an ElastAlert container, uploads provided test data to the
 Elasticsearch container, and then runs `elastalert-test-rule` against all the
 rules that are provided to it. The results of `elastalert-test-rule` are passed
