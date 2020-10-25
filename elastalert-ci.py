@@ -156,7 +156,8 @@ def main():
             rule = yaml.safe_load(rule_file)
 
         try:
-            if (check_rule(rule, data_config, os.path.dirname(args.data))):
+            data_directory = os.path.dirname(os.path.abspath(args.data))
+            if (check_rule(rule, data_config, data_directory)):
                 passed_rules.append(rule["name"])
                 print(f"Rule {rule['name']} passed!")
             else:
