@@ -9,5 +9,5 @@ weblogs:
   rules:
     - "Catch Firefox users"
   timestamp_field: "timestamp"
-  start_time: "2020-01-20T00:39:02"
+  start_time: "2020-08-20T00:39:02"
   end_time: "2020-09-20T06:15:34"

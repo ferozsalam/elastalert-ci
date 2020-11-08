@@ -18,4 +18,5 @@ COPY elastalert-ci.py /data
 COPY config.yaml /data
 
 CMD ["dockerize", "-wait", "http://elasticsearch:9200/_cluster/health", "-timeout", "120s", \
-            "python", "elastalert-ci.py", "--data", "example/data-files.yaml", "--rules_directory", "example/"]
+            "python", "elastalert-ci.py", "--data", "example/tests/data-files.yaml", \
+            "--rules_directory", "example/rules"]
