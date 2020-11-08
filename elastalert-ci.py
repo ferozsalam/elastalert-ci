@@ -131,10 +131,7 @@ def check_rule(rule, data_config, data_directory):
             exit(1)
 
         alert_fired = re.search(":Alert for", elastalert_run.stderr)
-        if (alert_fired and rule_matched(elastalert_run.stdout)):
-            return True
-        else:
-            return False
+        return (alert_fired and rule_matched(elastalert_run.stdout))
 
 def main():
     logging.basicConfig(level=logging.INFO)
