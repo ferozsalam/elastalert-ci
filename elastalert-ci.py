@@ -1,6 +1,7 @@
 import argparse
 import glob
 import json
+import logging
 import os
 import re
 import requests
@@ -94,9 +95,9 @@ def rule_matched(raw_elastalert_output):
 
 def check_rule(rule, data_config, data_directory):
     if "name" in rule:
-        print(f'Testing {rule.get("name")}')
+        logging.info(f'Testing {rule.get("name")}')
     else:
-        print('No rule name found, skipping YAML file')
+        logging.info('No rule name found, skipping YAML file')
         return True
 
     data_sources = filter(lambda x : rule["name"] in data_config[x]["rules"], data_config)
@@ -109,7 +110,7 @@ def check_rule(rule, data_config, data_directory):
         try:
             load_es_data(data)
         except requests.exceptions.HTTPError as e:
-            print(f"Failed to load data from {filename} into Elasticsearch, exiting")
+            logging.error(f"Failed to load data from {filename} into Elasticsearch, exiting")
             exit(1)
 
         elastalert_run = subprocess.run(["elastalert-test-rule",
@@ -125,8 +126,8 @@ def check_rule(rule, data_config, data_directory):
         try:
             clear_test_index()
         except requests.exceptions.HTTPError as e:
-            print("Failed to remove data from Elasticsearch, exiting")
-            print(e)
+            logging.error("Failed to remove data from Elasticsearch, exiting")
+            logging.error(e)
             exit(1)
 
         alert_fired = re.search(":Alert for", elastalert_run.stderr)
@@ -136,6 +137,8 @@ def check_rule(rule, data_config, data_directory):
             return False
 
 def main():
+    logging.basicConfig(level=logging.INFO)
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=str, help='File that contains data to match against')
     parser.add_argument('--rules_directory', type=str, help='Directory containing rules to run')
@@ -159,20 +162,21 @@ def main():
             data_directory = os.path.dirname(os.path.abspath(args.data))
             if (check_rule(rule, data_config, data_directory)):
                 passed_rules.append(rule["name"])
-                print(f"Rule {rule['name']} passed!")
+                logging.info(f"Rule {rule['name']} passed!")
             else:
                 failed_rules.append(rule["name"])
         except Exception as e:
-            print(f"YAML file raised an exception, skipping")
-            print(f"Detailed error:\n{e}")
+            logging.info(f"Skipping file {rule_filename}. Error:\n{e}")
             continue
 
     # Clean up
     if os.path.exists("rule_rewritten.yaml"):
         os.remove("rule_rewritten.yaml")
 
+    if len(passed_rules):
+        logging.info(f"{len(passed_rules)} passed rules: " + str(passed_rules))
     if len(failed_rules):
-        print("Failed rules: " + str(failed_rules))
+        logging.info(f"{len(failed_rules)} failed rules: " + str(failed_rules))
         exit(1)
     else:
         exit(0)
