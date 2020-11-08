@@ -6,7 +6,7 @@ import os
 import re
 import requests
 import subprocess
-import time
+import sys
 import yaml
 
 # Rewrite elements of a given rule to fit into the testing framework
@@ -111,7 +111,7 @@ def check_rule(rule, data_config, data_directory):
             load_es_data(data)
         except requests.exceptions.HTTPError as e:
             logging.error(f"Failed to load data from {filename} into Elasticsearch, exiting")
-            exit(1)
+            sys.exit(1)
 
         elastalert_run = subprocess.run(["elastalert-test-rule",
                                           "--formatted-output",
@@ -128,7 +128,7 @@ def check_rule(rule, data_config, data_directory):
         except requests.exceptions.HTTPError as e:
             logging.error("Failed to remove data from Elasticsearch, exiting")
             logging.error(e)
-            exit(1)
+            sys.exit(1)
 
         alert_fired = re.search(":Alert for", elastalert_run.stderr)
         return (alert_fired and rule_matched(elastalert_run.stdout))
@@ -174,9 +174,9 @@ def main():
         logging.info(f"{len(passed_rules)} passed rules: " + str(passed_rules))
     if len(failed_rules):
         logging.info(f"{len(failed_rules)} failed rules: " + str(failed_rules))
-        exit(1)
+        sys.exit(1)
     else:
-        exit(0)
+        sys.exit(0)
 
 if __name__ == '__main__':
     main()
