@@ -10,7 +10,7 @@ services:
     - "ES_HOST=elasticsearch"
     - "SKIP_SSL_VERIFY=1"
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.1
     ports:
     - "9200"
     - "9300"
