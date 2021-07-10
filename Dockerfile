@@ -1,9 +1,9 @@
-FROM python:3.8-buster
+FROM python:3.9-buster
 
 LABEL description="Elastalert CI testing module"
 LABEL maintainer="Feroz Salam (feroz@argh.in)"
 
-RUN pip install elastalert
+RUN pip install -v elastalert2==2.1.2
 
 # Required CircleCI dependencies
 RUN apt update && \
